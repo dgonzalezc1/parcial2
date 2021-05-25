@@ -1,9 +1,11 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
+import Detail from './Detail';
 
 function Table() {
 
+    const [selectedSerie, setSelectedSerie] = useState();
     const [info, setInfo] = useState([]);
     const language = window.navigator.language || navigator.browserLanguage;
 
@@ -29,12 +31,15 @@ function Table() {
         });
     }, []);
 
+    const handleClick = (e) => {
+        setSelectedSerie(e)
+    }
     
     return (
         <div>
             <h1><FormattedMessage id="Title"/></h1>
             <hr/>
-            <div>
+            <div className="tableBig">
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -49,7 +54,7 @@ function Table() {
                     <tbody>
                         {info.map(i =>{
                             return (
-                            <tr key={i.id}>
+                            <tr key={i.id} onClick={() => handleClick(i)}>
                                 <th scope="row">{i.id}</th>
                                 <td>{i.name}</td>
                                 <td>{i.channel}</td>
@@ -59,9 +64,11 @@ function Table() {
                             </tr>
                             )
                         })}
-
                     </tbody>
                 </table>
+                <div>
+                    {selectedSerie != null ? <Detail serie={selectedSerie} /> : null}
+                </div>
             </div>
         </div>
     )
