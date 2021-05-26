@@ -4,7 +4,8 @@
     "Channel": "Canal",
     "Seasons": "Temporadas",
     "Episodes": "Episodios",
-    "Released": "Fecha de lanzamiento"
-
+    "Released": "Fecha de lanzamiento",
+    "Error": "Error al cargar imagen",
+    "Visual": "Visualización de Temporadas vs Episodios"
 
 }

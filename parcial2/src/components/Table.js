@@ -7,9 +7,23 @@ function Table() {
 
     const [selectedSerie, setSelectedSerie] = useState();
     const [info, setInfo] = useState([]);
+    const [online, setOnline] = useState(true);
+
     const language = window.navigator.language || navigator.browserLanguage;
 
     useEffect(() => {
+
+        //console.log(navigator.onLine);
+        if(!navigator.onLine){ 
+        
+            setOnline(false);
+            if(localStorage.getItem("backup")===null){
+                console.log("Loading...");
+            } else {
+                const storedData = JSON.parse(localStorage.getItem("backup"));
+                setInfo(storedData);
+            }
+        } 
 
         let api = "";
 
@@ -24,7 +38,10 @@ function Table() {
         .then((result) => {
 
             console.log(result);
-            console.log(result[1].name);
+
+            //setOnline(true);
+            localStorage.setItem("backup", JSON.stringify(result));
+            //console.log(localStorage.getItem("backup"));
 
             setInfo(result);
 
@@ -33,6 +50,11 @@ function Table() {
 
     const handleClick = (e) => {
         setSelectedSerie(e)
+    }
+
+    const formatDate = (d) => {
+        let arr = d.split('/');
+        return arr[1] + '/' + arr[0] + '/' + arr[2];
     }
     
     return (
@@ -60,14 +82,14 @@ function Table() {
                                 <td>{i.channel}</td>
                                 <td>{i.seasons}</td>
                                 <td>{i.episodes}</td>
-                                <td>{i.release}</td>
+                                <td><FormattedDate value={formatDate(i.release)} year="numeric" month="long" day="numeric"/></td>
                             </tr>
                             )
                         })}
                     </tbody>
                 </table>
                 <div>
-                    {selectedSerie != null ? <Detail serie={selectedSerie} /> : null}
+                    {selectedSerie != null ? <Detail serie={selectedSerie} online={online} /> : null}
                 </div>
             </div>
         </div>
